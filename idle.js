@@ -20,7 +20,6 @@ define(function() {
         return this;
     }
     proto.reset = function() {
-        console.log(this);
         if (this._timer) {
             clearTimeout(this._timer);
         }
