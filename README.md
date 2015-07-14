@@ -49,29 +49,33 @@ Returns 'awake' or 'asleep'.
 
 For convenience, we keep a global Idler around as an internal module variable, and expose its methods as top-level functions of the module. So you will typically use idle.js like so:
 
-    // Uses global instance
-    define('myWidget', ['idle'], function(idle) {
-        var widget = function() {
-            // Constructor
-            idle.on('wake',  this.wake.bind(wake));
-                .on('sleep', this.sleep.bind(sleep));
-        }
-        // ...
-    });
+```javascript
+// Uses global instance
+define('myWidget', ['idle'], function(idle) {
+    var widget = function() {
+        // Constructor
+        idle.on('wake',  this.wake.bind(wake));
+            .on('sleep', this.sleep.bind(sleep));
+    }
+    // ...
+});
 
-    // And somewhere in your app you probably do:
-    require(['idle'], function(idle) { idle.setTimeout(200) });
-    // ... or similar, for custom global timeout
+// And somewhere in your app you probably do:
+require(['idle'], function(idle) { idle.setTimeout(200) });
+// ... or similar, for custom global timeout
+```
 
 However, if you need separate idle timers, you can instantiate them like so:
 
-    require(['idle'], function(idle) {
-        window.WidgetIdler = new idle.Idler(40);
-        window.WidgetIdler.on('wake', function() {
-            // ...
-        }).on('sleep', function() {
-            // ...
-        });
+```javascript
+require(['idle'], function(idle) {
+    window.WidgetIdler = new idle.Idler(40);
+    window.WidgetIdler.on('wake', function() {
+        // ...
+    }).on('sleep', function() {
+        // ...
     });
+});
+```
 
 And those will be cleanly separate from the global one.
