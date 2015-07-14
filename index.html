@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>idle.js demo</title>
-    <script src="require.js"></script>
+    <script src="./require.js"></script>
 </head>
 <body>
     <h1>My fancy widget</h1>
@@ -10,6 +10,10 @@
     <input type="text" value="Does not eat events"/>
     <input type="button" onclick="alert('pressed')" value="click me"/>
     <script>
+        requirejs.config({
+            baseUrl: './',
+        });
+
         var counter = 0,
             element = document.getElementById('counter'),
             timer;
