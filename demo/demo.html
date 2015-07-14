@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>idle.js demo</title>
+    <script src="/require.js"></script>
+</head>
+<body>
+    <h1>My fancy widget</h1>
+    <div>This counts up! <span id="counter">...</span></div>
+    <input type="text" value="Does not eat events"/>
+    <input type="button" onclick="alert('pressed')" value="click me"/>
+    <script>
+        var counter = 0,
+            element = document.getElementById('counter'),
+            timer;
+        function countPlusPlus() {
+            counter++;
+            element.innerHTML = counter;
+        }
+        function startTimer() {
+            timer = setInterval(countPlusPlus, 100); // 10/s
+        }
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        startTimer();
+        require(['idle'], function(idle) {
+            idle.on('wake', startTimer)
+                .on('sleep', stopTimer)
+                .setTimeout(5);
+        });
+    </script>
+    <div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam luctus pellentesque dolor quis auctor. Fusce a tortor et nulla posuere pretium. Aliquam facilisis libero et rhoncus porttitor. Donec ultricies turpis ac lobortis suscipit. Duis quis tincidunt lectus. Pellentesque viverra tincidunt ligula, nec tempor est suscipit ac. Pellentesque fringilla molestie erat vitae tempus. Aenean in dapibus dui, id convallis orci. Sed a quam dignissim, blandit turpis sit amet, dignissim neque. Quisque tempor nibh sagittis urna tempus, in vestibulum tortor sollicitudin.</p>
+
+        <p>Nunc mauris turpis, pharetra vitae erat sed, dapibus tristique massa. Suspendisse aliquam pellentesque tempus. Mauris iaculis dolor suscipit aliquet cursus. Morbi justo tellus, scelerisque sit amet tempus id, sollicitudin in orci. Etiam varius, odio non feugiat commodo, massa sem placerat ante, a egestas leo ex eu nibh. Aenean in nulla mi. Quisque dignissim, neque sit amet semper facilisis, nisl risus pellentesque risus, non malesuada arcu felis non quam. Etiam in auctor nunc.</p>
+
+        <p>Etiam molestie egestas varius. Fusce euismod, risus quis tempus facilisis, metus lacus pharetra quam, et ornare enim lorem ac metus. Nulla laoreet orci eu consequat scelerisque. Quisque vestibulum justo ut eros interdum, vitae ultrices nisl interdum. Maecenas pharetra arcu non elit euismod elementum. In a nulla eu ante lobortis venenatis eget non felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean at nisi arcu. Cras vestibulum sollicitudin metus porta porta. Nam velit lectus, suscipit sit amet nunc vitae, porta malesuada massa.</p>
+
+        <p>Quisque volutpat dapibus tortor, eget ultrices odio pharetra consequat. Nunc porttitor lacus at lacus tincidunt egestas. Nullam a purus feugiat, posuere nunc eget, posuere mi. Sed dictum vulputate nibh, eu ultricies nisl pellentesque eget. Aliquam eget hendrerit augue, sed pharetra nibh. Donec nec interdum lacus. Vestibulum tempus iaculis venenatis. Phasellus eu bibendum quam, et tempus sapien. Sed ac risus sapien. Nullam nisl urna, mattis ac dolor eget, accumsan commodo leo. Ut vel lorem eleifend, vulputate felis ultrices, vehicula lorem.</p>
+
+        <p>Donec mollis mattis turpis, et tristique augue placerat at. Cras id quam vitae nisl porttitor eleifend eu tincidunt ante. Donec malesuada suscipit eros id aliquam. Suspendisse potenti. Nulla vitae gravida ipsum. Vivamus molestie eros vel ex hendrerit, quis gravida massa faucibus. Quisque eu libero quis neque cursus pulvinar. Phasellus ultricies neque id eros varius posuere. Duis efficitur, eros fringilla placerat gravida, ante ipsum lacinia sem, id rutrum augue tortor at orci. Mauris felis lectus, vestibulum vitae accumsan vitae, sodales ac mi. Suspendisse id aliquet nulla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam commodo, nibh ut elementum ultrices, ex neque sollicitudin quam, in mattis tellus mi blandit nisl. Sed molestie, eros non tincidunt feugiat, ligula felis gravida ipsum, sed condimentum mauris libero vitae mi. Nulla facilisi. Maecenas vitae augue lectus.</p>
+    </div>
+</body>
+</html>
