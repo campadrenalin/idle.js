@@ -11,15 +11,23 @@ The use case here is when you have some fancy widget that regularly does compute
 
 The core item here is the Idler class, with the following API:
 
-### var idler = new Idler([timeout_seconds]);
+### var idler = new Idler([timeout_seconds], [hooks]);
 
 Constructor. You know the drill. Optionally takes a timeout as an argument, which can be adjusted after the fact. Timeouts are in seconds, which can be fractional. Internally, we multiply that up to milliseconds for SetInterval.
 
-Default timeout is 2 minutes (2 * 60).
+Also optionally takes a set of strings describing what event types to listen to on the 'window' object.
+
+Default timeout is 2 minutes (2 * 60). Default hooks are `['mousemove', 'scroll', 'keydown']`.
 
 ### idler.setTimeout(timeout_seconds);
 
 Set the timeout. This is in (potentially fractional) seconds. Setting this implies a reset.
+
+Returns Idler object for fluent construction.
+
+### idler.setHooks(hooks);
+
+Set the list of event types to listen to. This automatically unregisters all its existing listeners, before creating the ones requested.
 
 Returns Idler object for fluent construction.
 

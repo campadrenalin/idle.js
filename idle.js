@@ -1,7 +1,8 @@
 define(function() {
     var defaultTimeout = 2 * 60;
+    var defaultHooks = ['mousemove', 'scroll', 'keydown'];
 
-    function Idler(timeout) {
+    function Idler(timeout, hooks) {
         var self = this;
 
         self.listeners = { 'wake': [], 'sleep': [] };
@@ -9,7 +10,8 @@ define(function() {
         self.setTimeout(timeout || defaultTimeout)
         self._wake  = function() { self._broadcast('wake'); };
         self._sleep = function() { self._broadcast('sleep'); };
-        self._listen();
+        self._reset = function() { self.reset(); return true; };
+        self.setHooks(hooks || defaultHooks)
     }
     var proto = Idler.prototype;
 
@@ -53,16 +55,24 @@ define(function() {
 
         return this;
     }
-    proto._listen = function() {
-        // Make a bound version
+    proto.setHooks = function(hooks) {
         var self = this;
-        function reset() { self.reset(); return true; };
-
-        // Add hooks
-        var hooks = ['mousemove', 'scroll', 'keydown'];
-        for (var i = 0; i < hooks.length; i++) {
-            window.addEventListener(hooks[i], reset);
+        // Remove old hooks
+        if (self._hooks != undefined) {
+            for (var i = 0; i < self._hooks.length; i++) {
+                window.removeEventListener(self._hooks[i], self._reset);
+            }
         }
+
+        // Set up new hooks
+        for (var i = 0; i < hooks.length; i++) {
+            window.addEventListener(hooks[i], self._reset);
+        }
+
+        // Store data for potential undo later
+        self._hooks = hooks;
+
+        return self;
     }
 
     var globalIdler = new Idler();
