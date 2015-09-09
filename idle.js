@@ -2,15 +2,43 @@ define(function() {
     var defaultTimeout = 2 * 60;
     var defaultHooks = ['mousemove', 'scroll', 'keydown'];
 
+    // Used to reduce browser API overhead, particularly for mousemove
+    function Throttle(timeout, callback) {
+        this.timeout   = timeout;
+        this.callback  = callback;
+        this.waiting   = 0;
+        this.saturated = 0;
+
+        var self = this;
+        this.comeback = function() {
+            self.waiting   = 0;
+            if (self.saturated > 0) self.activate();
+            self.saturated = 0;
+        }
+        this.activate = function() {
+            if (self.waiting > 0) {
+                self.saturated = 1;
+                return;
+            }
+            self.waiting = setTimeout(self.comeback, self.timeout);
+            self.callback();
+        }
+    }
+
     function Idler(timeout, hooks) {
         var self = this;
 
+        // More complex structures
         self.listeners = { 'wake': [], 'sleep': [] };
+        self.throttle = new Throttle(1000, function(){ self.reset() });
 
-        self.setTimeout(timeout || defaultTimeout)
+        // Bound callbacks
         self._wake  = function() { self._broadcast('wake'); };
         self._sleep = function() { self._broadcast('sleep'); };
         self._reset = function() { self.reset(); return true; };
+
+        // Final initialization
+        self.setTimeout(timeout || defaultTimeout)
         self.setHooks(hooks || defaultHooks)
     }
     var proto = Idler.prototype;
